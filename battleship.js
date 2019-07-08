@@ -94,7 +94,6 @@ const hasShotBeenFiredBefore = (movesSoFarArray, xCoord, yCoord) => {
   let result = false
   movesSoFar.forEach((moveSoFar) => {
     if (xCoord === moveSoFar[0][0] && yCoord === moveSoFar[0][1]) {
-      // console.log('HIT1');
       result = true;
     }
   });
