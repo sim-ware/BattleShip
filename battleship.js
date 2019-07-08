@@ -89,7 +89,31 @@ destroyer2.forEach((coordinate) => {
 //
 const movesSoFar = [];
 //
+
+const hasShotBeenFiredBefore = (movesSoFarArray, xCoord, yCoord) => {
+  let result = false
+  movesSoFar.forEach((moveSoFar) => {
+    if (xCoord === moveSoFar[0][0] && yCoord === moveSoFar[0][1]) {
+      // console.log('HIT1');
+      result = true;
+    }
+  });
+  return result;
+}
+
+const doesShotSinkBattleShip = (movesSoFarArray, xCoord, yCoord) => {
+  console.log('1:movesSoFarArray:', movesSoFarArray);
+  console.log('2:xCoord:', xCoord);
+  console.log('3:3yCoord:', yCoord);
+}
+
 const fire = (x, y, grid) => {
+  // hasShotBeenFiredBefore?
+  if ( hasShotBeenFiredBefore(movesSoFar, x, y) ) {
+    console.log('ALREADY SHOT HERE, CHOOSE AGAIN');
+    return;
+  }
+  //
   if (grid[x][y] === 'B') {
     grid[x][y] = 'HIT-B';
     movesSoFar.push([[x, y], 'HIT-B']);
@@ -106,6 +130,10 @@ const fire = (x, y, grid) => {
     grid[x][y] = 'MISS';
     movesSoFar.push([[x, y], 'MISS']);
   }
+  // doesShotSinkBattleShip?
+  doesShotSinkBattleShip(movesSoFar, x, y);
+  // check if movesSoFar has either 5 'HIT-B's OR 4 'HIT-D1/2's
+  //
   return [x, y];
 }
 //
@@ -132,7 +160,7 @@ const testBattleship = [[ 1, 0 ], [ 2, 0 ], [ 3, 0 ], [ 4, 0 ], [ 5, 0 ]];
 const testDestroyer1 = [[ 0, 1 ], [ 0, 2 ], [ 0, 3 ], [ 0, 4 ]];
 const testDestroyer2 = [[ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 1, 6 ]];
 
-console.log('testGrid', testGrid);
+// console.log('testGrid', testGrid);
 console.log('testBattleship', testBattleship);
 console.log('testDestroyer1', testDestroyer1);
 console.log('testDestroyer2', testDestroyer2);
@@ -146,23 +174,37 @@ testDestroyer2.forEach((coordinate) => {
   testGrid[coordinate[0]][coordinate[1]] = 'D2';
 })
 console.log('testGridW/Ships');
-console.log(testGrid);
+// console.log(testGrid);
 fire(0,2, testGrid)
-console.log('movesSoFar');
-console.log(movesSoFar);
-console.log('testGridAfter1stShotTo0,2');
-console.log(testGrid);
+// console.log('movesSoFar');
+// console.log(movesSoFar);
+// console.log('testGridAfter1stShotTo0,2');
+// console.log(testGrid);
 fire(0,3, testGrid)
-console.log('movesSoFar');
-console.log(movesSoFar);
-console.log('testGridAfter2ndShotTo0,3');
-console.log(testGrid);
+// console.log('movesSoFar');
+// console.log(movesSoFar);
+// console.log('testGridAfter2ndShotTo0,3');
+// console.log(testGrid);
+fire(0,4, testGrid)
+// console.log('movesSoFar');
+// console.log(movesSoFar);
+// console.log('testGridAfter3rdShotTo0,4');
+// console.log(testGrid);
 // TRY TO DISABLE IF IT HITS THE SAME SHOT NOW!!!!
-
+// fire(0,4, testGrid)
+// console.log('movesSoFar');
+// console.log(movesSoFar);
+// console.log('testGridAfter4rdShotDuplicateTo0,4');
+// console.log(testGrid);
 
 //
 // ::|2|::find a way to sink a ship if all coordinates have been hit.
 // // // // // // // // // // // // // // // // // // // // // // // // // // //
+fire(0,1, testGrid)
+// console.log('movesSoFar');
+console.log(movesSoFar);
+// console.log('testGridAfter4rdShotDuplicateTo0,4');
+console.log(testGrid);
 
 
 
