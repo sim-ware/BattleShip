@@ -14,7 +14,5 @@ rl.question('Welcome aboard, Captain! What is your name? ', (answer) => {
 console.log('Here is what the radar shows:');
 
 console.log(battleship.allShips);
-const grid1 = battleship.generateGrid();
-// const grid2 = battleship.generateGrid();
-console.log(grid1);
-// console.log(grid2);
+// const grid1 = battleship.generateGrid();
+// console.log(grid1);
