@@ -243,7 +243,10 @@ console.log(JSON.stringify(testGrid[9]));
 
 
 
-
+module.exports = {
+    allShips: allShips,
+    generateGrid: generateGrid
+};
 
 
 
