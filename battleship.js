@@ -61,7 +61,7 @@ const areCoordinatesDuplicated = (ship1, ship2) => {
   return match;
 }
 //
-// Plotting Ships // // // // // // // // // // // // // // // // // // // // //
+// Generate Ships Coordinates // // // // // // // // // // // // // // // // // // // // //
 const battleship = getShipCoordinates(allShips[0])
 
 let destroyer1 = getShipCoordinates(allShips[1])
@@ -74,7 +74,7 @@ while (areCoordinatesDuplicated(destroyer2, destroyer1) || areCoordinatesDuplica
   destroyer2 = getShipCoordinates(allShips[2])
 }
 // // // // // // // // // // // // // // // // // // // // // // // // // // //
-// PLOT SHIPS ON GRID
+// Plot Ships on Grid
 const grid = generateGrid();
 // TODO: TURN THE BELOW INTO FUNCTIONS!!!
 battleship.forEach((coordinate) => {
@@ -99,20 +99,38 @@ const hasShotBeenFiredBefore = (movesSoFarArray, xCoord, yCoord) => {
   });
   return result;
 }
-
-const doesShotSinkBattleShip = (movesSoFarArray, xCoord, yCoord) => {
-  console.log('1:movesSoFarArray:', movesSoFarArray);
-  console.log('2:xCoord:', xCoord);
-  console.log('3:3yCoord:', yCoord);
+//
+let battleshipAlreadySunk = false;
+let destroyer1AlreadySunk = false;
+let destroyer2AlreadySunk = false;
+const doesShotSinkBattleShip = (movesSoFarArray) => {
+  const hitTallies = [];
+  movesSoFarArray.forEach((moveSoFar) => {
+    hitTallies.push(moveSoFar[1])
+  });
+  let numOfBs = hitTallies.filter(function(x){ return x === "HIT-B"; }).length;
+  if (numOfBs === 5 && !battleshipAlreadySunk) {
+    console.log('Battleship SUNK');
+    battleshipAlreadySunk = true;
+  }
+  let numOfD1s = hitTallies.filter(function(x){ return x === "HIT-D1"; }).length;
+  if (numOfD1s === 4 && !destroyer1AlreadySunk) {
+    console.log('Destroyer1 SUNK');
+    destroyer1AlreadySunk = true;
+  }
+  let numOfD2s = hitTallies.filter(function(x){ return x === "HIT-D2"; }).length;
+  if (numOfD2s === 4 && !destroyer2AlreadySunk) {
+    console.log('Destroyer2 SUNK');
+    destroyer2AlreadySunk = true;
+  }
 }
-
+//
 const fire = (x, y, grid) => {
   // hasShotBeenFiredBefore?
   if ( hasShotBeenFiredBefore(movesSoFar, x, y) ) {
     console.log('ALREADY SHOT HERE, CHOOSE AGAIN');
     return;
   }
-  //
   if (grid[x][y] === 'B') {
     grid[x][y] = 'HIT-B';
     movesSoFar.push([[x, y], 'HIT-B']);
@@ -130,9 +148,7 @@ const fire = (x, y, grid) => {
     movesSoFar.push([[x, y], 'MISS']);
   }
   // doesShotSinkBattleShip?
-  doesShotSinkBattleShip(movesSoFar, x, y);
-  // check if movesSoFar has either 5 'HIT-B's OR 4 'HIT-D1/2's
-  //
+  doesShotSinkBattleShip(movesSoFar);
   return [x, y];
 }
 //
@@ -173,7 +189,7 @@ testDestroyer2.forEach((coordinate) => {
   testGrid[coordinate[0]][coordinate[1]] = 'D2';
 })
 console.log('testGridW/Ships');
-// console.log(testGrid);
+console.log(testGrid);
 fire(0,2, testGrid)
 // console.log('movesSoFar');
 // console.log(movesSoFar);
@@ -199,11 +215,31 @@ fire(0,4, testGrid)
 //
 // ::|2|::find a way to sink a ship if all coordinates have been hit.
 // // // // // // // // // // // // // // // // // // // // // // // // // // //
+fire(1,0, testGrid)
+fire(2,0, testGrid)
+fire(3,0, testGrid)
+fire(4,0, testGrid)
+
+fire(1,3, testGrid)
+fire(1,3, testGrid)
+fire(1,4, testGrid)
+fire(1,5, testGrid)
+fire(1,5, testGrid)
+
+
 fire(0,1, testGrid)
-// console.log('movesSoFar');
+fire(5,0, testGrid)
 console.log(movesSoFar);
-// console.log('testGridAfter4rdShotDuplicateTo0,4');
-console.log(testGrid);
+console.log(JSON.stringify(testGrid[0]));
+console.log(JSON.stringify(testGrid[1]));
+console.log(JSON.stringify(testGrid[2]));
+console.log(JSON.stringify(testGrid[3]));
+console.log(JSON.stringify(testGrid[4]));
+console.log(JSON.stringify(testGrid[5]));
+console.log(JSON.stringify(testGrid[6]));
+console.log(JSON.stringify(testGrid[7]));
+console.log(JSON.stringify(testGrid[8]));
+console.log(JSON.stringify(testGrid[9]));
 
 
 
