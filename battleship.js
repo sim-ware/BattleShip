@@ -62,35 +62,38 @@ const areCoordinatesDuplicated = (ship1, ship2) => {
 }
 //
 // Generate Ships Coordinates // // // // // // // // // // // // // // // // // // // // //
-const battleship = getShipCoordinates(allShips[0])
+const generateShipCoordinates = () => {
+  const battleship = getShipCoordinates(allShips[0])
 
-let destroyer1 = getShipCoordinates(allShips[1])
-while (areCoordinatesDuplicated(battleship, destroyer1)) {
-  destroyer1 = getShipCoordinates(allShips[1])
-}
+  let destroyer1 = getShipCoordinates(allShips[1])
+  while (areCoordinatesDuplicated(battleship, destroyer1)) {
+    destroyer1 = getShipCoordinates(allShips[1])
+  }
 
-let destroyer2 = getShipCoordinates(allShips[2])
-while (areCoordinatesDuplicated(destroyer2, destroyer1) || areCoordinatesDuplicated(destroyer2, battleship)) {
-  destroyer2 = getShipCoordinates(allShips[2])
+  let destroyer2 = getShipCoordinates(allShips[2])
+  while (areCoordinatesDuplicated(destroyer2, destroyer1) || areCoordinatesDuplicated(destroyer2, battleship)) {
+    destroyer2 = getShipCoordinates(allShips[2])
+  }
+  return {battleship: battleship, 
+          destroyer1: destroyer1,
+          destroyer2: destroyer2}
 }
+//
 // // // // // // // // // // // // // // // // // // // // // // // // // // //
 // Plot Ships on Grid
-const grid = generateGrid();
-// TODO: TURN THE BELOW INTO FUNCTIONS!!!
-battleship.forEach((coordinate) => {
-  grid[coordinate[0]][coordinate[1]] = 'B';
-})
-destroyer1.forEach((coordinate) => {
-  grid[coordinate[0]][coordinate[1]] = 'D1';
-})
-destroyer2.forEach((coordinate) => {
-  grid[coordinate[0]][coordinate[1]] = 'D2';
-})
+const plotShipCoordinates = (shipObject, grid) => {
+  shipObject.battleship.forEach((coordinate) => {
+    grid[coordinate[0]][coordinate[1]] = 'B';
+  })
+  shipObject.destroyer1.forEach((coordinate) => {
+    grid[coordinate[0]][coordinate[1]] = 'D1';
+  })
+  shipObject.destroyer2.forEach((coordinate) => {
+    grid[coordinate[0]][coordinate[1]] = 'D2';
+  })
+}
 //
-const movesSoFar = [];
-//
-
-const hasShotBeenFiredBefore = (movesSoFarArray, xCoord, yCoord) => {
+const hasShotBeenFiredBefore = (movesSoFar, xCoord, yCoord) => {
   let result = false
   movesSoFar.forEach((moveSoFar) => {
     if (xCoord === moveSoFar[0][0] && yCoord === moveSoFar[0][1]) {
@@ -100,32 +103,29 @@ const hasShotBeenFiredBefore = (movesSoFarArray, xCoord, yCoord) => {
   return result;
 }
 //
-let battleshipAlreadySunk = false;
-let destroyer1AlreadySunk = false;
-let destroyer2AlreadySunk = false;
+// let battleshipAlreadySunk = false;
+// let destroyer1AlreadySunk = false;
+// let destroyer2AlreadySunk = false;
 const doesShotSinkBattleShip = (movesSoFarArray) => {
   const hitTallies = [];
   movesSoFarArray.forEach((moveSoFar) => {
     hitTallies.push(moveSoFar[1])
   });
   let numOfBs = hitTallies.filter(function(x){ return x === "HIT-B"; }).length;
-  if (numOfBs === 5 && !battleshipAlreadySunk) {
+  if (numOfBs === 5) {
     console.log('Battleship SUNK');
-    battleshipAlreadySunk = true;
   }
   let numOfD1s = hitTallies.filter(function(x){ return x === "HIT-D1"; }).length;
-  if (numOfD1s === 4 && !destroyer1AlreadySunk) {
+  if (numOfD1s === 4) {
     console.log('Destroyer1 SUNK');
-    destroyer1AlreadySunk = true;
   }
   let numOfD2s = hitTallies.filter(function(x){ return x === "HIT-D2"; }).length;
-  if (numOfD2s === 4 && !destroyer2AlreadySunk) {
+  if (numOfD2s === 4) {
     console.log('Destroyer2 SUNK');
-    destroyer2AlreadySunk = true;
   }
 }
 //
-const fire = (x, y, grid) => {
+const fire = (x, y, grid, movesSoFar) => {
   // hasShotBeenFiredBefore?
   if ( hasShotBeenFiredBefore(movesSoFar, x, y) ) {
     console.log('ALREADY SHOT HERE, CHOOSE AGAIN');
@@ -153,6 +153,9 @@ const fire = (x, y, grid) => {
 }
 
 module.exports = {
+    fire: fire,
     allShips: allShips,
-    generateGrid: generateGrid
+    generateGrid: generateGrid,
+    generateShipCoordinates: generateShipCoordinates,
+    plotShipCoordinates: plotShipCoordinates
 };
